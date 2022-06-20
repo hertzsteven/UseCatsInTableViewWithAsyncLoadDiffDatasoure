@@ -7,6 +7,10 @@
 
 import UIKit
 
+fileprivate struct APIResponse: Codable {
+  let results: [Post]
+}
+
 class ViewController: UIViewController {
     
     
@@ -16,7 +20,7 @@ class ViewController: UIViewController {
     var snapshot: NSDiffableDataSourceSnapshot<Section,Post>! = nil
     
     //  MARK: -  Misc Objects
-    var apiResponse = APIResponse()
+//    var apiResponse = APIResponse()
         
     //  MARK: -  UI Objects
     
@@ -108,13 +112,17 @@ extension ViewController {
             //  - - - Things worked we got the data
              //do the decoding from here
             print(" in \(#function) at line \(#line)")
+            print(data)
             do {
                 let decodedJson = try JSONDecoder().decode(APIResponse.self, from: data)
-                self?.apiResponse = decodedJson
-                print(" in \(#function) at line \(#line)")
-                self?.apiResponse.results.forEach { item in
+                decodedJson.results.forEach { item in
                     print(item.urls.regular)
                 }
+                // self?.apiResponse = decodedJson
+                print(" in \(#function) at line \(#line)")
+//                self?.apiResponse.results.forEach { item in
+//                    print(item.urls.regular)
+//                }
                 DispatchQueue.main.async {
 //                    self?.collectionView.reloadData()
                 }
@@ -200,3 +208,15 @@ extension ViewController {
 
 }
 
+/**
+ var content = cell.defaultContentConfiguration()
+
+ // Configure content.
+ content.image = UIImage(systemName: "star")
+ content.text = "Favorites"
+
+ // Customize appearance.
+ content.imageProperties.tintColor = .purple
+
+ cell.contentConfiguration = content
+ */

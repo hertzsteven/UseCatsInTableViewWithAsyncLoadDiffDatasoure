@@ -15,6 +15,7 @@
 
 import UIKit
 
+
 enum GettingDataError: Error {
     case dataTask
     case response(URLResponse)

@@ -12,24 +12,27 @@ enum Section {
     case main
 }
 
+import Foundation
+
 struct PostUserProfileImage: Codable {
-    let medium: String
+  let medium: String
 }
 
 struct PostUser: Codable {
-    let profile_image: PostUserProfileImage
+  let profile_image: PostUserProfileImage
 }
 
 struct PostUrls: Codable {
-    let regular: String
+  let regular: String
 }
 
-class Post: Codable, Hashable {
-    var identifier = UUID()
-    let id: String
-    let description: String?
-    let user: PostUser
-    let urls: PostUrls
+struct Post: Codable, Hashable {
+    let identifier = UUID()
+  let id: String
+  let description: String?
+  let user: PostUser
+  let urls: PostUrls
+    let mmm = "hello"
     func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
     }
@@ -38,6 +41,4 @@ class Post: Codable, Hashable {
     }
 }
 
-struct APIResponse: Codable {
-    var results: [Post] = []
-}
+
