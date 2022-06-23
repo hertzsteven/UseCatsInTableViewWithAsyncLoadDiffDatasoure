@@ -221,6 +221,7 @@ extension ViewController: UITableViewDataSource {
         content.textProperties.font = .systemFont(ofSize: 12.0)
         content.text = apiResponse.results[indexPath.row].urls.regular
         content.image = UIImage(systemName: "rectangle")
+        content.imageProperties.tintColor = .orange
         
         cell.contentConfiguration = content
         return cell
@@ -228,15 +229,3 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-/**
- var content = cell.defaultContentConfiguration()
-
- // Configure content.
- content.image = UIImage(systemName: "star")
- content.text = "Favorites"
-
- // Customize appearance.
- content.imageProperties.tintColor = .purple
-
- cell.contentConfiguration = content
- */
