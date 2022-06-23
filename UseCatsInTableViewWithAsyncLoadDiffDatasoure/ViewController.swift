@@ -138,14 +138,17 @@ extension ViewController {
                 self?.apiResponse.results.forEach { item in
                     print(item.urls.regular)
                 }
-                self?.snapshot = NSDiffableDataSourceSnapshot()
-                self?.snapshot.appendSections([.main])
+                
+                var snapshot = NSDiffableDataSourceSnapshot<Section,Post>()
+ 
+                snapshot.appendSections([.main])
+                
                 guard let posts: [Post] = self?.apiResponse.results else {fatalError("xx")}
-                self!.snapshot.appendItems(posts)
+                snapshot.appendItems(posts)
                 
                 
                 DispatchQueue.main.async {
-                    self?.dataSource.apply((self?.snapshot)!, animatingDifferences: true, completion: nil)
+                    self?.dataSource.apply((snapshot), animatingDifferences: true)
 
 //                    self?.collectionView.reloadData()
                 }
