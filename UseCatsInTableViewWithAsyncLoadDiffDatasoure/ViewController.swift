@@ -42,8 +42,22 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         textViewSetup()
         tableViewSetup()
-        tableView.dataSource = self
+//        tableView.dataSource = self
         setupView()
+        
+        dataSource = UITableViewDiffableDataSource(tableView: tableView, cellProvider: { tableView, indexPath, post in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            var content = cell.defaultContentConfiguration()
+            content.textProperties.font = .systemFont(ofSize: 12.0)
+            content.text = post.urls.regular
+            
+            content.image = UIImage(systemName: "rectangle")
+            content.imageProperties.tintColor = .orange
+            
+            cell.contentConfiguration = content
+            return cell
+        })
+        
         getTheData()
     }
 }
@@ -124,7 +138,15 @@ extension ViewController {
                 self?.apiResponse.results.forEach { item in
                     print(item.urls.regular)
                 }
+                self?.snapshot = NSDiffableDataSourceSnapshot()
+                self?.snapshot.appendSections([.main])
+                guard let posts: [Post] = self?.apiResponse.results else {fatalError("xx")}
+                self!.snapshot.appendItems(posts)
+                
+                
                 DispatchQueue.main.async {
+                    self?.dataSource.apply((self?.snapshot)!, animatingDifferences: true, completion: nil)
+
 //                    self?.collectionView.reloadData()
                 }
 
