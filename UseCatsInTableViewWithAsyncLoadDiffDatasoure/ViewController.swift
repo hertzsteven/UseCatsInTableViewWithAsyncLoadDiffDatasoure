@@ -7,7 +7,7 @@
 
 import UIKit
 
-fileprivate struct APIResponse: Codable {
+struct APIResponse: Codable {
   let results: [Post]
 }
 
@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     var snapshot: NSDiffableDataSourceSnapshot<Section,Post>! = nil
     
     //  MARK: -  Misc Objects
-//    var apiResponse = APIResponse()
+    var apiResponse = APIResponse(results: [])
         
     //  MARK: -  UI Objects
     
@@ -42,6 +42,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         textViewSetup()
         tableViewSetup()
+        tableView.dataSource = self
         setupView()
         getTheData()
     }
@@ -118,11 +119,11 @@ extension ViewController {
                 decodedJson.results.forEach { item in
                     print(item.urls.regular)
                 }
-                // self?.apiResponse = decodedJson
+                self?.apiResponse = decodedJson
                 print(" in \(#function) at line \(#line)")
-//                self?.apiResponse.results.forEach { item in
-//                    print(item.urls.regular)
-//                }
+                self?.apiResponse.results.forEach { item in
+                    print(item.urls.regular)
+                }
                 DispatchQueue.main.async {
 //                    self?.collectionView.reloadData()
                 }
@@ -204,8 +205,27 @@ extension ViewController {
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
     }
-    
+}
 
+extension ViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        apiResponse.results.count
+    }
+    
+       
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        
+        var content = cell.defaultContentConfiguration()
+        content.textProperties.font = .systemFont(ofSize: 12.0)
+        content.text = apiResponse.results[indexPath.row].urls.regular
+        content.image = UIImage(systemName: "rectangle")
+        
+        cell.contentConfiguration = content
+        return cell
+        
+    }
 }
 
 /**
